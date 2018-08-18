@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean id="collector" class="cn.johnyu.mocker.collector.NetCollector"></bean>
+	<bean id="usbCollector" class="cn.johnyu.mocker.collector.UsbCollector"></bean>
+	
+	<bean id="collector1" class="cn.johnyu.mocker.collector.CollectorFactory" 
+	factory-method="getInstance"></bean>
+	
+	
+	<bean id="collector2" class="cn.johnyu.mocker.collector.CollectorFactory" 
+	factory-method="getInstance"></bean>
+	
+	<bean id="collectorFactory" class="cn.johnyu.mocker.collector.CollectorFactory"></bean>
+	<bean id="collector3" factory-bean="collectorFactory" factory-method="getInstance1"></bean>
+	
+	<bean id="factor1" class="cn.johnyu.mocker.service.FactorAnalyser" autowire="byName">
+		<!-- <property name="collector" ref="usbCollector"></property> -->
+	</bean>
+	
+	<bean id="factor2" class="cn.johnyu.mocker.service.FactorAnalyser">
+		<constructor-arg index="0" ref="usbCollector"></constructor-arg>
+	</bean>
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="url" value="jdbc:oracle:thin:@10.211.55.4:1521:xe"></property>
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver"></property>
+		<property name="username" value="john"></property>
+		<property name="password" value="123"></property>
+	</bean>
+	
+	<bean id="template" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="customerDao" class="dao.CustomerDaoImpl">
+		<property name="template" ref="template"></property>
+	</bean>
+	
+	
+</beans>
+
+
+
+
